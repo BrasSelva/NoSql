@@ -23,12 +23,12 @@ print(f"Values: {values}")
 
 pool = ConnectionPool(host='localhost', port=6379, db=0)
 
-r_custom = redis.Redis(connection_pool=pool)
 
 def worker():
-    r_thread = redis.Redis(connection_pool=pool)
-    r_thread.set('user:2:name', 'Jane Doe')
-    print(f"Thread Redis Operation: {r_thread.get('user:2:name').decode('utf-8')}")
+    r = redis.Redis(connection_pool=pool)
+    r.set('nom', 'Alice')
+    nom = r.get('nom')
+    print(f"Nom récupéré depuis Redis : {nom.decode('utf-8')}")
 
 threads = [threading.Thread(target=worker) for _ in range(5)]
 
@@ -39,5 +39,3 @@ for thread in threads:
 for thread in threads:
     thread.join()
 
-r_custom.set('user:3:name', 'Alice Smith')
-print(f"User 3 Name: {r_custom.get('user:3:name').decode('utf-8')}")
